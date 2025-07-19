@@ -8,20 +8,20 @@ use std::time::{Duration, Instant};
 use encoding_rs::Encoding;
 use unicode_normalization::UnicodeNormalization;
 
-/// Pour chaque ligne du FICHIER1, vérifie si elle est présente n'importe où dans le FICHIER2.
+/// Pour chaque ligne du file1, vérifie si elle est présente n'importe où dans le file2.
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// Le fichier contenant les lignes à chercher (les "aiguilles").
-    #[arg(value_name = "FICHIER1")]
+    #[arg(value_name = "file1")]
     file1: PathBuf,
 
     /// Le fichier dans lequel chercher (la "meule de foin").
-    #[arg(value_name = "FICHIER2")]
+    #[arg(value_name = "file2")]
     file2: PathBuf,
 
     /// Fichier de sortie pour les lignes non trouvées.
-    #[arg(short, long, value_name = "FICHIER_SORTIE")]
+    #[arg(short, long, value_name = "ouput")]
     output: Option<PathBuf>,
 
     /// Activer l'affichage des informations de débogage.
