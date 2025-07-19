@@ -90,3 +90,31 @@ Ce projet utilise les dépendances suivantes (telles que définies dans `Cargo.t
 -   `encoding_rs` (version `0.8.35`) : Pour la gestion des encodages de texte.
 -   `unicode-normalization` (version `0.1.24`) : Pour la normalisation des chaînes Unicode.
 -   `memchr` (version `2.7.5`) : Dépendance indirecte pour des recherches de caractères performantes.
+
+### Compilation pour Windows (depuis Linux/macOS)
+
+Si vous êtes sur Linux ou macOS et que vous souhaitez compiler `compar` pour Windows, vous devez d'abord ajouter la cible de compilation Windows:
+
+```bash
+rustup target add x86_64-pc-windows-gnu
+# ou pour MSVC (si vous avez Visual Studio installé sur Windows)
+# rustup target add x86_64-pc-windows-msvc
+```
+
+Ensuite, vous pouvez compiler le projet en spécifiant la cible:
+
+```bash
+cargo build --release --target x86_64-pc-windows-gnu
+```
+
+L'exécutable se trouvera dans `target/x86_64-pc-windows-gnu/release/compar.exe`.
+
+## Tests
+
+Ce projet inclut des tests unitaires pour garantir la fiabilité de la logique de remplacement. Pour exécuter ces tests, utilisez la commande suivante à la racine du projet :
+
+```bash
+cargo test
+```
+
+Cette commande compile le programme en mode test et exécute toutes les fonctions de test.

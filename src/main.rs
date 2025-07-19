@@ -173,3 +173,92 @@ fn main() -> io::Result<()> {
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+    use std::io::Write;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    static TEST_DIR_COUNTER: AtomicUsize = AtomicUsize::new(0);
+
+    // Crée un répertoire temporaire unique pour chaque test.
+    // Renvoie le chemin du répertoire.
+    fn setup_test_dir() -> PathBuf {
+        let pid = std::process::id();
+        let count = TEST_DIR_COUNTER.fetch_add(1, Ordering::SeqCst);
+        let temp_dir = std::env::temp_dir().join(format!("compar_tests_{}_{}", pid, count));
+        fs::create_dir_all(&temp_dir).unwrap();
+        temp_dir
+    }
+
+    // Nettoie le répertoire de test.
+    fn teardown_test_dir(temp_dir: &PathBuf) {
+        fs::remove_dir_all(temp_dir).unwrap();
+    }
+
+    #[test]
+    fn test_decode_utf8_no_bom() {
+        let temp_dir = setup_test_dir();
+        let file_path = temp_dir.join("utf8_no_bom.txt");
+        let mut file = File::create(&file_path).unwrap();
+        file.write_all(b"hello world").unwrap();
+
+        let content = decode_file_to_string(&file_path).unwrap();
+        assert_eq!(content, "hello world");
+        teardown_test_dir(&temp_dir);
+    }
+
+    #[test]
+    fn test_decode_utf8_with_bom() {
+        let temp_dir = setup_test_dir();
+        let file_path = temp_dir.join("utf8_with_bom.txt");
+        let mut file = File::create(&file_path).unwrap();
+        file.write_all(b"\xEF\xBB\xBFhello world").unwrap();
+
+        let content = decode_file_to_string(&file_path).unwrap();
+        assert_eq!(content, "hello world");
+        teardown_test_dir(&temp_dir);
+    }
+
+    #[test]
+    fn test_decode_utf16le_with_bom() {
+        let temp_dir = setup_test_dir();
+        let file_path = temp_dir.join("utf16le_with_bom.txt");
+        let mut file = File::create(&file_path).unwrap();
+        file.write_all(b"\xFF\xFEh\x00e\x00l\x00l\x00o\x00").unwrap();
+
+        let content = decode_file_to_string(&file_path).unwrap();
+        assert_eq!(content, "hello");
+        teardown_test_dir(&temp_dir);
+    }
+
+    #[test]
+    fn test_decode_utf16be_with_bom() {
+        let temp_dir = setup_test_dir();
+        let file_path = temp_dir.join("utf16be_with_bom.txt");
+        let mut file = File::create(&file_path).unwrap();
+        file.write_all(b"\xFE\xFF\x00h\x00e\x00l\x00l\x00o").unwrap();
+
+        let content = decode_file_to_string(&file_path).unwrap();
+        assert_eq!(content, "hello");
+        teardown_test_dir(&temp_dir);
+    }
+
+    #[test]
+    fn test_line_comparison_with_length() {
+        let line1 = "abcde123";
+        let line2 = "abcde456";
+
+        let processed_line1 = line1.trim().nfc().collect::<String>();
+        let processed_line2 = line2.trim().nfc().collect::<String>();
+
+        let final_line1 = processed_line1.chars().take(5).collect::<String>();
+        let final_line2 = processed_line2.chars().take(5).collect::<String>();
+
+        assert_eq!(final_line1, "abcde");
+        assert_eq!(final_line2, "abcde");
+        assert_eq!(final_line1, final_line2);
+    }
+}
