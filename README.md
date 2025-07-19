@@ -19,13 +19,7 @@ Assurez-vous d'avoir Rust et Cargo d'installés sur votre système. Vous pouvez 
 
 ### Compilation
 
-1.  Clonez ce dépôt :
-    ```bash
-    git clone <URL_DU_DEPOT>
-    cd compar
-    ```
-
-2.  Compilez le projet en mode `release` pour obtenir les meilleures performances :
+Compilez le projet en mode `release` pour obtenir les meilleures performances :
     ```bash
     cargo build --release
     ```
@@ -37,21 +31,21 @@ L'exécutable se trouvera dans le répertoire `target/release/`.
 La syntaxe de base est la suivante :
 
 ```bash
-./target/release/compar [OPTIONS] <FICHIER1> <FICHIER2>
+./target/release/compar [OPTIONS] <file1> <file2>
 ```
 
 ### Arguments
 
--   `<FICHIER1>` : Le fichier contenant les lignes à chercher (les "aiguilles").
--   `<FICHIER2>` : Le fichier dans lequel chercher (la "meule de foin").
+-   `<file1>` : Le fichier contenant les lignes à chercher (les "aiguilles").
+-   `<file2>` : Le fichier dans lequel chercher (la "meule de foin").
 
 ### Options
 
--   `-o, --output <FICHIER_SORTIE>` : Spécifie un fichier dans lequel écrire les lignes non trouvées. Si cette option n'est pas utilisée, les lignes seront affichées sur la sortie standard.
+-   `-o, --output <output_file>` : Spécifie un fichier dans lequel écrire les lignes non trouvées. Si cette option n'est pas utilisée, les lignes seront affichées sur la sortie standard.
 -   `--debug` : Active l'affichage des informations de débogage dans le terminal.
 -   `--length <N>` : Compare uniquement les `N` premiers caractères de chaque ligne.
 -   `--stat` : Affiche des statistiques détaillées sur la comparaison à la fin du traitement.
--   `--found` : Inverse la logique et affiche les lignes de FICHIER1 qui sont trouvées dans FICHIER2.
+-   `--found` : Inverse la logique et affiche les lignes de file1 qui sont trouvées dans file2.
 -   `-h, --help` : Affiche l'aide.
 -   `-V, --version` : Affiche la version de l'outil.
 
