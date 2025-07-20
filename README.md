@@ -54,25 +54,25 @@ La syntaxe de base est la suivante :
 -   **Comparaison simple** :
 
     ```bash
-    ./target/release/compar fichier1.txt fichier2.txt
+    ./compar fichier1.txt fichier2.txt
     ```
 
 -   **Enregistrer le résultat dans un fichier** :
 
     ```bash
-    ./target/release/compar -o resultat.txt fichier1.txt fichier2.txt
+    ./compar -o resultat.txt fichier1.txt fichier2.txt
     ```
 
 -   **Comparer uniquement les 15 premiers caractères** :
 
     ```bash
-    ./target/release/compar --length 15 fichier1.txt fichier2.txt
+    ./compar --length 15 fichier1.txt fichier2.txt
     ```
 
 -   **Utiliser le mode débogage** :
 
     ```bash
-    ./target/release/compar --debug fichier1.txt fichier2.txt
+    ./compar --debug fichier1.txt fichier2.txt
     ```
 
 ## Dépendances
