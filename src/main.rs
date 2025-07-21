@@ -8,40 +8,40 @@ use std::time::{Duration, Instant};
 use encoding_rs::Encoding;
 use unicode_normalization::UnicodeNormalization;
 
-/// Pour chaque ligne du file1, vérifie si elle est présente n'importe où dans le file2.
+/// For each line in file1, check if it is present anywhere in file2.
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    /// Le fichier contenant les lignes à chercher (les "aiguilles").
+    /// The file containing the lines to search for (the "needles").
     #[arg(value_name = "file1")]
     file1: PathBuf,
 
-    /// Le fichier dans lequel chercher (la "meule de foin").
+    /// The file to search within (the "haystack").
     #[arg(value_name = "file2")]
     file2: PathBuf,
 
-    /// Fichier de sortie pour les lignes non trouvées.
+    /// Output file for lines not found.
     #[arg(short, long, value_name = "ouput")]
     output: Option<PathBuf>,
 
-    /// Activer l'affichage des informations de débogage.
+    /// Enable debug information display.
     #[arg(long)]
     debug: bool,
 
-    /// Comparer les lignes sur les N premiers caractères.
+    /// Compare lines based on the first N characters.
     #[arg(long, value_name = "N")]
     length: Option<usize>,
 
-    /// Afficher les statistiques de comparaison à la fin.
+    /// Display comparison statistics at the end.
     #[arg(long)]
     stat: bool,
 
-    /// Affiche les lignes trouvées au lieu des lignes manquantes.
+    /// Display found lines instead of missing lines.
     #[arg(long)]
     found: bool,
 }
 
-// Tente de décoder des octets bruts en String en essayant plusieurs encodages courants.
+// Attempts to decode raw bytes into a String by trying several common encodings.
 fn decode_file_to_string(path: &PathBuf) -> io::Result<String> {
     let bytes = std::fs::read(path)?;
 
@@ -72,7 +72,7 @@ fn decode_file_to_string(path: &PathBuf) -> io::Result<String> {
     };
 
     if had_errors {
-        eprintln!("Avertissement: Des erreurs de décodage ont été rencontrées pour le fichier {}. Certains caractères pourraient être incorrects.", path.display());
+        eprintln!("Warning: Decoding errors were encountered for file {}. Some characters might be incorrect.", path.display());
     }
     Ok(cow.into_owned())
 }
@@ -81,11 +81,11 @@ fn main() -> io::Result<()> {
     let args = Args::parse();
     let start_time = Instant::now();
 
-    // Étape 1: Lire et décoder le contenu complet du fichier 2 en UTF-8 et normaliser.
+    // Step 1: Read and decode the full content of file 2 to UTF-8 and normalize.
     let file2_full_content = decode_file_to_string(&args.file2)?;
     let lines_in_file2_count = file2_full_content.lines().count();
 
-    // Étape 2: Stocker les lignes du fichier 2 dans un HashSet pour une recherche rapide.
+    // Step 2: Store file 2 lines in a HashSet for quick lookup.
     let mut lines_in_file2: HashSet<String> = HashSet::new();
     for line in file2_full_content.lines() {
         let processed_line = line.trim().nfc().collect::<String>();
@@ -96,11 +96,11 @@ fn main() -> io::Result<()> {
         lines_in_file2.insert(final_line);
     }
 
-    // Étape 3: Compter les lignes du premier fichier pour la barre de progression.
+    // Step 3: Count lines in the first file for the progress bar.
     let file1_content = decode_file_to_string(&args.file1)?;
     let total_lines = file1_content.lines().count() as u64;
 
-    // Étape 4: Configuration de la barre de progression.
+    // Step 4: Progress bar configuration.
     let pb = ProgressBar::new(total_lines);
     pb.set_style(
         ProgressStyle::default_bar()
@@ -110,7 +110,7 @@ fn main() -> io::Result<()> {
     );
     pb.enable_steady_tick(Duration::from_millis(100));
 
-    // Étape 5: Comparaison des fichiers.
+    // Step 5: File comparison.
     let mut missing_lines: Vec<String> = Vec::new();
     let mut found_lines: Vec<String> = Vec::new();
     for (i, line) in file1_content.lines().enumerate() {
@@ -121,21 +121,21 @@ fn main() -> io::Result<()> {
         };
         
         if args.debug {
-            eprintln!("DEBUG: Ligne {}: '{}'", i, line_to_compare);
+            eprintln!("DEBUG: Line {}: '{}'", i, line_to_compare);
             eprintln!("DEBUG: Hex: {:x?}", line_to_compare.as_bytes());
         }
 
         if !line_to_compare.is_empty() && !lines_in_file2.contains(&line_to_compare) {
             missing_lines.push(line.to_string());
             if args.debug {
-                eprintln!("DEBUG: Non trouvée.");
+                eprintln!("DEBUG: Not found.");
             }
         } else {
             if !line_to_compare.is_empty() {
                 found_lines.push(line.to_string());
             }
             if args.debug {
-                eprintln!("DEBUG: Trouvée.");
+                eprintln!("DEBUG: Found.");
             }
         }
         pb.inc(1);
@@ -143,7 +143,7 @@ fn main() -> io::Result<()> {
 
     pb.finish_and_clear();
 
-    // Étape 6: Écrire le résultat dans la sortie.
+    // Step 6: Write the result to the output.
     let lines_to_output = if args.found {
         &found_lines
     } else {
@@ -163,12 +163,12 @@ fn main() -> io::Result<()> {
 
     if args.stat {
         let duration = start_time.elapsed();
-        println!("\n-- Statistiques --");
-        println!("Fichier 1 (aiguilles): {} lignes", total_lines);
-        println!("Fichier 2 (meule de foin): {} lignes", lines_in_file2_count);
-        println!("Lignes trouvées: {}", found_lines.len());
-        println!("Lignes non trouvées: {}", missing_lines.len());
-        println!("Temps de traitement: {:?}", duration);
+        println!("\n-- Statistics --");
+        println!("File 1 (needles): {} lines", total_lines);
+        println!("File 2 (haystack): {} lines", lines_in_file2_count);
+        println!("Lines found: {}", found_lines.len());
+        println!("Lines not found: {}", missing_lines.len());
+        println!("Processing time: {:?}", duration);
     }
 
     Ok(())
@@ -183,8 +183,8 @@ mod tests {
 
     static TEST_DIR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
-    // Crée un répertoire temporaire unique pour chaque test.
-    // Renvoie le chemin du répertoire.
+    // Creates a unique temporary directory for each test.
+    // Returns the path to the directory.
     fn setup_test_dir() -> PathBuf {
         let pid = std::process::id();
         let count = TEST_DIR_COUNTER.fetch_add(1, Ordering::SeqCst);
@@ -193,7 +193,7 @@ mod tests {
         temp_dir
     }
 
-    // Nettoie le répertoire de test.
+    // Cleans up the test directory.
     fn teardown_test_dir(temp_dir: &PathBuf) {
         fs::remove_dir_all(temp_dir).unwrap();
     }
