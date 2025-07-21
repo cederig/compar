@@ -1,114 +1,141 @@
 # Compar
 
-`compar` est un outil en ligne de commande écrit en Rust qui compare deux fichiers texte et identifie les lignes du premier fichier qui ne sont pas présentes dans le second. Il offre des options pour personnaliser la comparaison, comme la possibilité de ne comparer qu'un nombre défini de caractères au début de chaque ligne.
+`compar` is a command-line tool written in Rust that compares two text files and identifies lines in the first file that are not present in the second. It offers options to customize the comparison, such as the ability to compare only a defined number of characters at the beginning of each line.
 
-## Fonctionnalités
+## Features
 
-- Compare deux fichiers texte ligne par ligne.
-- Identifie et affiche les lignes du premier fichier absentes dans le second.
-- Option pour limiter la comparaison aux `N` premiers caractères de chaque ligne.
-- Barre de progression pour suivre l'avancement du traitement.
-- Gestion de différents encodages de fichiers (UTF-8, UTF-16).
-- Option de débogage pour un suivi détaillé du processus.
+- Compares two text files line by line.
+- Identifies and displays lines from the first file that are absent in the second.
+- Option to limit the comparison to the first `N` characters of each line.
+- Progress bar to track processing progress.
+- Handles different file encodings (UTF-8, UTF-16).
+- Debug option for detailed process tracking.
+
+## Dependencies
+
+This project uses the following dependencies (as defined in `Cargo.toml`):
+
+-   `clap` (version `4.5.41`): For command-line argument parsing.
+-   `indicatif` (version `0.18.0`): For displaying a progress bar.
+-   `encoding_rs` (version `0.8.35`): For text encoding management.
+-   `unicode-normalization` (version `0.1.24`): For Unicode string normalization.
+-   `memchr` (version `2.7.5`): Indirect dependency for efficient character searching.
 
 ## Installation
 
-### Prérequis
+### Prerequisites
 
-Assurez-vous d'avoir Rust et Cargo d'installés sur votre système. Vous pouvez les installer en suivant les instructions sur le site officiel de Rust : [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
+Make sure you have Rust and Cargo installed on your system. You can install them by following the instructions on the official Rust website: [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
 
-### Compilation
-
-Compilez le projet en mode `release` pour obtenir les meilleures performances :
-    ```bash
+### Compilation for Linux (from Linux/macOS)
+1.  Clone this repository:
+    ```sh
+    git clone https://github.com/cederig/compar.git
+    cd compar
+    ```
+2.  Compile the project:
+    ```sh
     cargo build --release
     ```
+    The executable will be located in `target/release/compar`.
 
-L'exécutable se trouvera dans le répertoire `target/release/`.
+### Compilation for Windows (from Linux/macOS)
 
-## Utilisation
+To compile this project for Windows from another operating system (like Linux or macOS), you can use cross-compilation. You will need the Rust target for Windows.
 
-La syntaxe de base est la suivante :
+1.  Add the Windows target to your Rust installation:
+    ```sh
+    rustup target add x86_64-pc-windows-gnu
+    ```
+
+2.  Compile the project for the Windows target:
+    ```sh
+    cargo build --release --target=x86_64-pc-windows-gnu
+    ```
+
+ The executable for Windows will be located in `target/x86_64-pc-windows-gnu/release/compar.exe`.
+
+### Compilation for macOS (from Linux/macOS)
+
+To compile this project for macOS from another operating system (like Linux or macOS), you can use cross-compilation. You will need the Rust target for macOS.
+
+1.  Add the macOS target to your Rust installation (choose the correct architecture):
+    *   For Intel Macs (x86_64):
+        ```sh
+        rustup target add x86_64-apple-darwin
+        ```
+    *   For Apple Silicon Macs (aarch64):
+        ```sh
+        rustup target add aarch64-apple-darwin
+        ```
+
+2.  Compile the project for the macOS target (choose the correct architecture):
+    *   For Intel Macs:
+        ```sh
+        cargo build --release --target=x86_64-apple-darwin
+        ```
+    *   For Apple Silicon Macs:
+        ```sh
+        cargo build --release --target=aarch64-apple-darwin
+        ```
+
+The executable for macOS will be located in `target/<your_mac_target>/release/compar` (e.g., `target/x86_64-apple-darwin/release/compar`).
+
+## Usage
+
+The basic syntax is as follows:
 
 ```bash
-./target/release/compar [OPTIONS] <file1> <file2>
+./compar [OPTIONS] <file1> <file2>
 ```
 
 ### Arguments
 
--   `<file1>` : Le fichier contenant les lignes à chercher (les "aiguilles").
--   `<file2>` : Le fichier dans lequel chercher (la "meule de foin").
+-   `<file1>`: The file containing the lines to search for (the "needles").
+-   `<file2>`: The file to search within (the "haystack").
 
 ### Options
 
--   `-o, --output <output_file>` : Spécifie un fichier dans lequel écrire les lignes non trouvées. Si cette option n'est pas utilisée, les lignes seront affichées sur la sortie standard.
--   `--debug` : Active l'affichage des informations de débogage dans le terminal.
--   `--length <N>` : Compare uniquement les `N` premiers caractères de chaque ligne.
--   `--stat` : Affiche des statistiques détaillées sur la comparaison à la fin du traitement.
--   `--found` : Inverse la logique et affiche les lignes de file1 qui sont trouvées dans file2.
--   `-h, --help` : Affiche l'aide.
--   `-V, --version` : Affiche la version de l'outil.
+-   `-o, --output <output_file>`: Specifies a file to write the unfound lines to. If this option is not used, the lines will be displayed on standard output.
+-   `--debug`: Activates the display of debug information in the terminal.
+-   `--length <N>`: Compares only the first `N` characters of each line.
+-   `--stat`: Displays detailed comparison statistics at the end of processing.
+-   `--found`: Reverses the logic and displays lines from file1 that are found in file2.
+-   `-h, --help`: Displays help.
+-   `-V, --version`: Displays the tool version.
 
-### Exemples
+### Examples
 
--   **Comparaison simple** :
-
-    ```bash
-    ./compar fichier1.txt fichier2.txt
-    ```
-
--   **Enregistrer le résultat dans un fichier** :
+-   Simple comparison:
 
     ```bash
-    ./compar -o resultat.txt fichier1.txt fichier2.txt
+    ./compar file1.txt file2.txt
     ```
 
--   **Comparer uniquement les 15 premiers caractères** :
+-   Save the result to a file:
 
     ```bash
-    ./compar --length 15 fichier1.txt fichier2.txt
+    ./compar -o result.txt file1.txt file2.txt
     ```
 
--   **Utiliser le mode débogage** :
+-   Compare only the first 15 characters:
 
     ```bash
-    ./compar --debug fichier1.txt fichier2.txt
+    ./compar --length 15 file1.txt file2.txt
     ```
 
-## Dépendances
+-   Use debug mode:
 
-Ce projet utilise les dépendances suivantes (telles que définies dans `Cargo.toml`) :
-
--   `clap` (version `4.5.41`) : Pour l'analyse des arguments de la ligne de commande.
--   `indicatif` (version `0.18.0`) : Pour afficher une barre de progression.
--   `encoding_rs` (version `0.8.35`) : Pour la gestion des encodages de texte.
--   `unicode-normalization` (version `0.1.24`) : Pour la normalisation des chaînes Unicode.
--   `memchr` (version `2.7.5`) : Dépendance indirecte pour des recherches de caractères performantes.
-
-### Compilation pour Windows (depuis Linux/macOS)
-
-Si vous êtes sur Linux ou macOS et que vous souhaitez compiler `compar` pour Windows, vous devez d'abord ajouter la cible de compilation Windows:
-
-```bash
-rustup target add x86_64-pc-windows-gnu
-# ou pour MSVC (si vous avez Visual Studio installé sur Windows)
-# rustup target add x86_64-pc-windows-msvc
-```
-
-Ensuite, vous pouvez compiler le projet en spécifiant la cible:
-
-```bash
-cargo build --release --target x86_64-pc-windows-gnu
-```
-
-L'exécutable se trouvera dans `target/x86_64-pc-windows-gnu/release/compar.exe`.
+    ```bash
+    ./compar --debug file1.txt file2.txt
+    ```
 
 ## Tests
 
-Ce projet inclut des tests unitaires pour garantir la fiabilité de la logique de remplacement. Pour exécuter ces tests, utilisez la commande suivante à la racine du projet :
+This project includes unit tests; to run them, use the following command at the project root:
 
 ```bash
 cargo test
 ```
 
-Cette commande compile le programme en mode test et exécute toutes les fonctions de test.
+This command compiles the program in test mode and executes all test functions.
