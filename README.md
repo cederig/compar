@@ -104,7 +104,7 @@ The basic syntax is as follows:
 -   `-h, --help`: Displays help.
 -   `-V, --version`: Displays the tool version.
 
-### Examples
+## Examples
 
 -   Simple comparison:
 
