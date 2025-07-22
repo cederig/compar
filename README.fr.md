@@ -104,7 +104,7 @@ La syntaxe de base est la suivante :
 -   `-h, --help` : Affiche l'aide.
 -   `-V, --version` : Affiche la version de l'outil.
 
-### Exemples
+## Exemples
 
 -   Comparaison simple :
 
