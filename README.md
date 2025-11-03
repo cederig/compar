@@ -1,6 +1,6 @@
 # Compar
 
-`compar` is a command-line tool written in Rust that compares two text files and identifies lines in the first file that are not present in the second. It offers options to customize the comparison, such as the ability to compare only a defined number of characters at the beginning of each line.
+`compar`  is a simple and fast command-line tool written in Rust that compares two text files and identifies lines in the first file that are not present in the second. It offers options to customize the comparison, such as the ability to compare only a defined number of characters at the beginning of each line.
 
 ## Features
 
@@ -15,11 +15,11 @@
 
 This project uses the following dependencies (as defined in `Cargo.toml`):
 
--   `clap` (version `4.5.41`): For command-line argument parsing.
--   `indicatif` (version `0.18.0`): For displaying a progress bar.
+-   `clap` (version `4.5.51`): For command-line argument parsing.
+-   `indicatif` (version `0.18.2`): For displaying a progress bar.
 -   `encoding_rs` (version `0.8.35`): For text encoding management.
--   `unicode-normalization` (version `0.1.24`): For Unicode string normalization.
--   `memchr` (version `2.7.5`): Indirect dependency for efficient character searching.
+-   `unicode-normalization` (version `0.1.25`): For Unicode string normalization.
+-   `memchr` (version `2.7.6`): Indirect dependency for efficient character searching.
 
 ## Installation
 
@@ -53,7 +53,7 @@ To compile this project for Windows from another operating system (like Linux or
     cargo build --release --target=x86_64-pc-windows-gnu
     ```
 
- The executable for Windows will be located in `target/x86_64-pc-windows-gnu/release/compar.exe`.
+The Windows executable will be located in `target/x86_64-pc-windows-gnu/release/compar.exe`.
 
 ### Compilation for macOS (from Linux/macOS)
 
@@ -79,14 +79,14 @@ To compile this project for macOS from another operating system (like Linux or m
         cargo build --release --target=aarch64-apple-darwin
         ```
 
-The executable for macOS will be located in `target/<your_mac_target>/release/compar` (e.g., `target/x86_64-apple-darwin/release/compar`).
+The macOS executable will be located in `target/<your_mac_target>/release/compar` (e.g., `target/x86_64-apple-darwin/release/compar`).
 
 ## Usage
 
 The basic syntax is as follows:
 
 ```bash
-./compar [OPTIONS] <file1> <file2>
+compar [OPTIONS] <file1> <file2>
 ```
 
 ### Arguments
@@ -107,26 +107,22 @@ The basic syntax is as follows:
 ## Examples
 
 -   Simple comparison:
-
-    ```bash
+    ```sh
     ./compar file1.txt file2.txt
     ```
 
 -   Save the result to a file:
-
-    ```bash
+    ```sh
     ./compar -o result.txt file1.txt file2.txt
     ```
 
 -   Compare only the first 15 characters:
-
-    ```bash
+    ```sh
     ./compar --length 15 file1.txt file2.txt
     ```
 
 -   Use debug mode:
-
-    ```bash
+    ```sh
     ./compar --debug file1.txt file2.txt
     ```
 

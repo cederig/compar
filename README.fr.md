@@ -1,6 +1,6 @@
 # Compar
 
-`compar` est un outil en ligne de commande écrit en Rust qui compare deux fichiers texte et identifie les lignes du premier fichier qui ne sont pas présentes dans le second. Il offre des options pour personnaliser la comparaison, comme la possibilité de ne comparer qu'un nombre défini de caractères au début de chaque ligne.
+`compar` est un outil en ligne de commande simple et rapide écrit en Rust qui compare deux fichiers texte et identifie les lignes du premier fichier qui ne sont pas présentes dans le second. Il offre des options pour personnaliser la comparaison, comme la possibilité de ne comparer qu'un nombre défini de caractères au début de chaque ligne.
 
 ## Fonctionnalités
 
@@ -15,11 +15,11 @@
 
 Ce projet utilise les dépendances suivantes (telles que définies dans `Cargo.toml`) :
 
--   `clap` (version `4.5.41`) : Pour l'analyse des arguments de la ligne de commande.
--   `indicatif` (version `0.18.0`) : Pour afficher une barre de progression.
+-   `clap` (version `4.5.51`) : Pour l'analyse des arguments de la ligne de commande.
+-   `indicatif` (version `0.18.2`) : Pour afficher une barre de progression.
 -   `encoding_rs` (version `0.8.35`) : Pour la gestion des encodages de texte.
--   `unicode-normalization` (version `0.1.24`) : Pour la normalisation des chaînes Unicode.
--   `memchr` (version `2.7.5`) : Dépendance indirecte pour des recherches de caractères performantes.
+-   `unicode-normalization` (version `0.1.25`) : Pour la normalisation des chaînes Unicode.
+-   `memchr` (version `2.7.6`) : Dépendance indirecte pour des recherches de caractères performantes.
 
 ## Installation
 
@@ -86,7 +86,7 @@ L'exécutable pour macOS se trouvera dans `target/<votre_cible_mac>/release/comp
 La syntaxe de base est la suivante :
 
 ```bash
-./compar [OPTIONS] <file1> <file2>
+compar [OPTIONS] <file1> <file2>
 ```
 
 ### Arguments
@@ -107,26 +107,22 @@ La syntaxe de base est la suivante :
 ## Exemples
 
 -   Comparaison simple :
-
-    ```bash
+    ```sh
     ./compar fichier1.txt fichier2.txt
     ```
 
 -   Enregistrer le résultat dans un fichier :
-
-    ```bash
+    ```sh
     ./compar -o resultat.txt fichier1.txt fichier2.txt
     ```
 
 -   Comparer uniquement les 15 premiers caractères :
-
-    ```bash
+    ```sh
     ./compar --length 15 fichier1.txt fichier2.txt
     ```
 
 -   Utiliser le mode débogage :
-
-    ```bash
+    ```sh
     ./compar --debug fichier1.txt fichier2.txt
     ```
 
