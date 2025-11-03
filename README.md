@@ -85,7 +85,7 @@ The macOS executable will be located in `target/<your_mac_target>/release/compar
 
 The basic syntax is as follows:
 
-```bash
+```sh
 compar [OPTIONS] <file1> <file2>
 ```
 
@@ -130,7 +130,7 @@ compar [OPTIONS] <file1> <file2>
 
 This project includes unit tests; to run them, use the following command at the project root:
 
-```bash
+```sh
 cargo test
 ```
 
