@@ -27,7 +27,7 @@ Ce projet utilise les dépendances suivantes (telles que définies dans `Cargo.t
 
 Assurez-vous d'avoir Rust et Cargo d'installés sur votre système. Vous pouvez les installer en suivant les instructions sur le site officiel de Rust : [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
 
-### Compilation pour Linux (depuis Linux/macOS)
+### Compilation pour Linux (depuis Linux)
 1.  Clonez ce dépôt :
     ```sh
     git clone https://github.com/cederig/compar.git
@@ -79,7 +79,7 @@ Pour compiler ce projet pour macOS à partir d'un autre système d'exploitation 
         cargo build --release --target=aarch64-apple-darwin
         ```
 
-L'exécutable pour macOS se trouvera dans `target/<votre_cible_mac>/release/compar` (par exemple, `target/x86_64-apple-darwin/release/compar`).
+L'exécutable pour macOS se trouvera dans `target/<votre_cible_mac>/release/compar`.
 
 ## Utilisation
 
